@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { Refresh, Sun } from '../../../public/assets/svgs'
 import Button from './Button'
+import Infos from './Infos'
 
 const Main = () => {
   return (
@@ -17,7 +18,7 @@ const Main = () => {
       />
 
       <section className="flex w-full flex-col max-sm:pl-[26px] sm:px-16 lg:px-[165px]">
-        <div className="z-50 mt-14 h-auto w-[324px] md:w-[573px]">
+        {/* <div className="z-50 mt-14 h-auto w-[324px] md:w-[573px]">
           <div className="flex justify-between">
             <p className="w-full text-[12px] leading-[22px] sm:w-[88%] sm:text-base md:w-[100%]">
               “The science of operations, as derived from mathematics more
@@ -27,9 +28,9 @@ const Main = () => {
             <Refresh className="sm:mt-2" />
           </div>
           <h5 className="mt-[13px] text-[12px] sm:text-lg">Ada Lovelace</h5>
-        </div>
+        </div> */}
 
-        <section className="z-50 mt-[300px] w-auto">
+        <section className="z-50 w-auto">
           <div className="flex gap-x-4">
             <Sun />
             <h4 className="text-[12px] max-md:tracking-[3.6px] sm:text-base md:text-xl">
@@ -40,10 +41,11 @@ const Main = () => {
           <div className="max-sm:mt-4">
             <h1
               className="
-                text-[100px]
+                text-6xl
                 font-bold
                 max-md:leading-none
                 max-md:tracking-[-4.38px]
+                mobile:text-[100px]
                 sm:text-[175px]
                 md:text-10xl
               "
@@ -83,6 +85,8 @@ const Main = () => {
           <Button />
         </div>
       </section>
+
+      <Infos />
     </section>
   )
 }

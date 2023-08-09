@@ -16,3 +16,8 @@ ul, li{
   padding: 0px;
   margin: 0px;
 }
+
+#infos_container {
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+}

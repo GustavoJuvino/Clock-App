@@ -26,6 +26,9 @@ const config: Config = {
         '5xl': ['56px', { fontWeight: 'bold' }],
         '10xl': ['200px', { fontWeight: 'bold', letterSpacing: '-5px' }],
       },
+      screens: {
+        mobile: '340px',
+      },
     },
   },
   plugins: [],
