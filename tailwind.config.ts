@@ -8,10 +8,23 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        'darker-gunpowder-gray': '#303030',
+      },
+      fontSize: {
+        base: ['18px', { lineHeight: '28px', fontWeight: 'regular' }],
+        xs: ['15px', { lineHeight: '28px', letterSpacing: '3px' }],
+        lg: ['18px', { fontWeight: 'bold', lineHeight: '28px' }],
+        xl: [
+          '20px',
+          { fontWeight: 'regular', lineHeight: '28px', letterSpacing: '4px' },
+        ],
+        '2xl': [
+          '24px',
+          { fontWeight: 'bold', lineHeight: '28px', letterSpacing: '4.8px' },
+        ],
+        '5xl': ['56px', { fontWeight: 'bold' }],
+        '10xl': ['200px', { fontWeight: 'bold', letterSpacing: '-5px' }],
       },
     },
   },
