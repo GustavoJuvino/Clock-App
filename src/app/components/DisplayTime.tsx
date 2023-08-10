@@ -1,10 +1,53 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState, useMemo } from 'react'
 import Button from './Button'
 import { Refresh, Sun } from '../../../public/assets/svgs'
 import { useGlobalContext } from '../context/store'
 
-const Clock = () => {
+const DisplayTime = () => {
+  let currentMessage = ''
+  const [time, setTime] = useState<string>()
+  const [timeZone, setTimeZone] = useState<string>()
   const { infosContainer, setInfosContainer } = useGlobalContext()
+
+  // 👇️ Jul 25, 2023, 16:34:06
+  // console.log(
+  //   date.toLocaleString('en-US', {
+  //     dateStyle: 'medium',
+  //     timeStyle: 'medium',
+  //     hour12: false,
+  //   }),
+  // );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(
+        new Date().getHours() +
+          ':' +
+          (new Date().getMinutes() < 10 ? '0' : '') +
+          new Date().getMinutes(),
+      )
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
+  useMemo(() => {
+    setTimeZone(
+      new Date()
+        .toLocaleDateString('en-US', {
+          day: 'numeric',
+          timeZoneName: 'short',
+        })
+        .slice(4),
+    )
+  }, [])
+
+  if (new Date().getHours() <= 12) currentMessage = 'Good Morning'
+  else if (new Date().getHours() > 12) currentMessage = 'Good Afternoon'
+  else currentMessage = 'Good Evening'
 
   return (
     <section
@@ -22,7 +65,7 @@ const Clock = () => {
         className="z-50 mt-14 h-auto w-[324px] data-[infos-actived=true]:hidden md:w-[573px]"
       >
         <div className="flex justify-between">
-          <p className="w-full text-[12px] leading-[22px] sm:w-[88%] sm:text-base md:w-[100%]">
+          <p className="w-[50%] text-[12px] leading-[22px] sm:w-[88%] sm:text-base md:w-[100%]">
             “The science of operations, as derived from mathematics more
             especially, is a science of itself, and has its own abstract truth
             and value.”
@@ -34,12 +77,16 @@ const Clock = () => {
 
       <section
         data-infos-actived={infosContainer}
-        className="z-50 mt-[22rem] w-auto data-[infos-actived=true]:max-sm:mt-36 data-[infos-actived=true]:sm:my-14"
+        className="z-50 mt-[10rem] w-auto data-[infos-actived=true]:max-sm:mt-36 data-[infos-actived=true]:sm:my-14 md:mt-[22rem]"
       >
         <div className="flex gap-x-4">
           <Sun />
-          <h4 className="text-[12px] max-md:tracking-[3.6px] sm:text-base md:text-xl">
-            GOOD MORNING, IT’S CURRENTLY
+          <h4 className="flex text-[12px] uppercase max-md:tracking-[3.6px] max-mobile:hidden sm:text-base md:text-xl">
+            {`${currentMessage}, it's currently`}
+          </h4>
+
+          <h4 className="text-[12px] uppercase mobile:hidden">
+            {currentMessage}
           </h4>
         </div>
 
@@ -55,9 +102,20 @@ const Clock = () => {
                 md:text-10xl
               "
           >
-            11:37
-            <span className="text-[32px] font-light uppercase max-sm:ml-1 md:text-[40px]">
-              bst
+            {time}
+            <span
+              className="
+                text-[18px]
+                font-light
+                uppercase
+                tracking-tighter
+                max-sm:ml-1
+                max-sm:pl-2
+                md:text-[40px]
+                lg:pl-5
+              "
+            >
+              {timeZone}
             </span>
           </h1>
         </div>
@@ -93,4 +151,4 @@ const Clock = () => {
   )
 }
 
-export default Clock
+export default DisplayTime

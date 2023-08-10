@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import React from 'react'
 import Infos from './Infos'
-import Clock from './Clock'
+import DisplayTime from './DisplayTime'
 
 const Main = () => {
   return (
@@ -17,7 +17,7 @@ const Main = () => {
         priority={true}
       />
 
-      <Clock />
+      <DisplayTime />
 
       <Infos />
     </section>
