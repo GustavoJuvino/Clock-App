@@ -1,9 +1,13 @@
+'use client'
 import { ComponentProps } from 'react'
 import { ArrowDown } from '../../../public/assets/svgs'
+import { useGlobalContext } from '../context/store'
 
 export type ButtonProps = ComponentProps<'button'>
 
 const Button = ({ ...props }: ButtonProps) => {
+  const { infosContainer } = useGlobalContext()
+
   return (
     <button
       className="
@@ -28,7 +32,7 @@ const Button = ({ ...props }: ButtonProps) => {
         "
       {...props}
     >
-      More
+      {infosContainer ? 'Less' : 'More'}
       <div
         className="
             flex
@@ -42,7 +46,10 @@ const Button = ({ ...props }: ButtonProps) => {
             hover:bg-[#999999]
         "
       >
-        <ArrowDown />
+        <ArrowDown
+          data-infos-actived={infosContainer}
+          className=" duration-300 data-[infos-actived=true]:rotate-180"
+        />
       </div>
     </button>
   )
