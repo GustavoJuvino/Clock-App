@@ -27,7 +27,7 @@ const config: Config = {
         '10xl': ['200px', { fontWeight: 'bold', letterSpacing: '-5px' }],
       },
       screens: {
-        mobile: '340px',
+        mobile: '350px',
       },
     },
   },

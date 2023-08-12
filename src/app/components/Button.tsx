@@ -12,14 +12,15 @@ const Button = ({ ...props }: ButtonProps) => {
     <button
       className="
             flex
-            h-14
-            w-[146px]
+            h-[39px]
+            w-[115px]
             items-center
             justify-center
             gap-x-1
             rounded-[28px]
             bg-white
             pl-5
+            text-[12px]
             font-bold
             uppercase
             leading-[28px]
@@ -28,6 +29,8 @@ const Button = ({ ...props }: ButtonProps) => {
             text-opacity-50
             duration-300
             hover:text-[#999999]
+            sm:h-14
+            sm:w-[146px]
             sm:text-[16px]
         "
       {...props}
@@ -36,14 +39,16 @@ const Button = ({ ...props }: ButtonProps) => {
       <div
         className="
             flex
-            h-10
-            w-10
+            h-8
+            w-8
             items-center
             justify-center
             rounded-full
             bg-darker-gunpowder-gray
             duration-300
             hover:bg-[#999999]
+            sm:h-10
+            sm:w-10
         "
       >
         <ArrowDown

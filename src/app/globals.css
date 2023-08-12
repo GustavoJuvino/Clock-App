@@ -21,3 +21,11 @@ ul, li{
   background-color: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(10px);
 }
+
+
+
+@media (max-height: 750px) {
+  #display_clock[data-infos-actived="true"] {
+    top: -6rem;
+  }
+}

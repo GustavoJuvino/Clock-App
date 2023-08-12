@@ -1,24 +1,49 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Button from './Button'
 import { Refresh, Sun } from '../../../public/assets/svgs'
 import { useGlobalContext } from '../context/store'
 
+interface locationProps {
+  city: string
+  countryCode: string
+}
+
 const DisplayTime = () => {
-  let currentMessage = ''
   const [time, setTime] = useState<string>()
   const [timeZone, setTimeZone] = useState<string>()
+  const [message, setMessage] = useState<string>()
   const { infosContainer, setInfosContainer } = useGlobalContext()
+  const [loading, setLoading] = useState(false)
+  const [location, setLocation] = useState<locationProps>()
 
-  // 👇️ Jul 25, 2023, 16:34:06
-  // console.log(
-  //   date.toLocaleString('en-US', {
-  //     dateStyle: 'medium',
-  //     timeStyle: 'medium',
-  //     hour12: false,
-  //   }),
-  // );
+  const testLocation = useCallback(() => {
+    const success = (position: GeolocationPosition) => {
+      const latitude = position.coords.latitude
+      const longitude = position.coords.longitude
+
+      const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+
+      const fetchData = async () => {
+        setLoading(true)
+
+        try {
+          const response = await fetch(geoApiUrl)
+          const data = await response.json()
+          setLocation(data)
+        } catch (error) {
+          console.log(error)
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchData()
+    }
+
+    navigator.geolocation.getCurrentPosition(success)
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,12 +54,11 @@ const DisplayTime = () => {
           new Date().getMinutes(),
       )
     }, 1000)
-    return () => {
-      clearInterval(timer)
-    }
-  }, [])
 
-  useMemo(() => {
+    if (new Date().getHours() <= 12) setMessage('Good Morning')
+    if (new Date().getHours() > 12) setMessage('Good Afternoon')
+    if (new Date().getHours() >= 18) setMessage('Good Evening')
+
     setTimeZone(
       new Date()
         .toLocaleDateString('en-US', {
@@ -43,98 +67,109 @@ const DisplayTime = () => {
         })
         .slice(4),
     )
-  }, [])
 
-  if (new Date().getHours() <= 12) currentMessage = 'Good Morning'
-  else if (new Date().getHours() > 12) currentMessage = 'Good Afternoon'
-  else currentMessage = 'Good Evening'
+    testLocation()
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [testLocation])
 
   return (
     <section
       className="
-            flex
-            w-full
-            flex-col
-            max-sm:pl-[26px]
-            sm:px-16
-            lg:px-[165px]
+          relative
+          flex
+          h-[100vh]
+          w-auto
+          flex-col
+          max-sm:ml-[26px]
+          sm:mx-16
+          xl:mx-[165px]
         "
     >
       <div
         data-infos-actived={infosContainer}
-        className="z-50 mt-14 h-auto w-[324px] data-[infos-actived=true]:hidden md:w-[573px]"
+        className="
+            z-50
+            mt-14
+            h-auto
+            w-auto
+            data-[infos-actived=true]:hidden
+            mobile:w-[324px]
+            md:w-[573px]
+          "
       >
-        <div className="flex justify-between">
-          <p className="w-[50%] text-[12px] leading-[22px] sm:w-[88%] sm:text-base md:w-[100%]">
+        <div className="flex">
+          <p className="w-[90%] text-[12px] leading-[22px] sm:w-full sm:text-base">
             “The science of operations, as derived from mathematics more
             especially, is a science of itself, and has its own abstract truth
             and value.”
           </p>
-          <Refresh className="sm:mt-2" />
+          <Refresh className="mt-2 sm:mt-4" />
         </div>
         <h5 className="mt-[13px] text-[12px] sm:text-lg">Ada Lovelace</h5>
       </div>
 
       <section
+        id="display_clock"
         data-infos-actived={infosContainer}
-        className="z-50 mt-[10rem] w-auto data-[infos-actived=true]:max-sm:mt-36 data-[infos-actived=true]:sm:my-14 md:mt-[22rem]"
+        className="
+            absolute
+            bottom-10
+            z-50
+            w-full
+            data-[infos-actived=true]:top-24
+            sm:bottom-16
+            data-[infos-actived=true]:sm:top-14
+            md:bottom-[98px]
+            data-[infos-actived=true]:md:top-0
+            data-[infos-actived=true]:md:mt-14
+          "
       >
-        <div className="flex gap-x-4">
-          <Sun />
-          <h4 className="flex text-[12px] uppercase max-md:tracking-[3.6px] max-mobile:hidden sm:text-base md:text-xl">
-            {`${currentMessage}, it's currently`}
-          </h4>
+        <section>
+          <div className="flex gap-x-4">
+            <Sun />
+            <h4 className="flex text-[12px] uppercase max-md:tracking-[3.6px] max-mobile:hidden sm:text-base md:text-xl">
+              {`${message}, it's currently`}
+            </h4>
 
-          <h4 className="text-[12px] uppercase mobile:hidden">
-            {currentMessage}
-          </h4>
-        </div>
+            <h4 className="text-[12px] uppercase mobile:hidden">{message}</h4>
+          </div>
 
-        <div className="max-sm:mt-4">
-          <h1
-            className="
+          <div className="max-sm:mt-4">
+            <h1
+              className="
                 text-6xl
                 font-bold
                 max-md:leading-none
                 max-md:tracking-[-4.38px]
-                mobile:text-[100px]
+                mobile:text-[95px]
                 sm:text-[175px]
                 md:text-10xl
               "
-          >
-            {time}
-            <span
-              className="
-                text-[18px]
-                font-light
-                uppercase
-                tracking-tighter
-                max-sm:ml-1
-                max-sm:pl-2
-                md:text-[40px]
-                lg:pl-5
-              "
             >
-              {timeZone}
-            </span>
-          </h1>
-        </div>
-      </section>
+              {time}
 
-      <div
-        className="
-            z-50
-            flex
-            w-full
-            justify-between
-            gap-y-12
-            max-md:flex-col
-            sm:gap-y-20
-            md:items-center
-          "
-      >
-        <h3
-          className="
+              <span
+                className="
+                ml-3
+                text-[15px]
+                font-light
+                max-sm:tracking-tighter
+                sm:text-[24px]
+                md:text-[32px]
+                xl:text-[40px]
+              "
+              >
+                {timeZone}
+              </span>
+            </h1>
+          </div>
+
+          <div className="flex w-full justify-between max-md:flex-col max-md:gap-y-20 md:items-center">
+            <h3
+              className="
                 text-[15px]
                 uppercase
                 max-md:tracking-[3.6px]
@@ -142,11 +177,15 @@ const DisplayTime = () => {
                 sm:text-lg
                 md:text-2xl
               "
-        >
-          in london, uk
-        </h3>
-        <Button onClick={() => setInfosContainer(!infosContainer)} />
-      </div>
+            >
+              {loading && 'loading...'}
+              {location && `in ${location.city}, ${location.countryCode}`}
+            </h3>
+
+            <Button onClick={() => setInfosContainer(!infosContainer)} />
+          </div>
+        </section>
+      </section>
     </section>
   )
 }
