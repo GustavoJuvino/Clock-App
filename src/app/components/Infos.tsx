@@ -1,9 +1,29 @@
 'use client'
-import React from 'react'
+
+import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '../context/store'
 
 const Infos = () => {
   const { infosContainer } = useGlobalContext()
+  const [timezoneArea, setTimezoneArea] = useState<string>()
+
+  useEffect(() => {
+    setTimezoneArea(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  }, [])
+
+  const now = new Date()
+  const currentDate = new Date().getTime()
+
+  // Day of the year
+  const start = Number(new Date(now.getFullYear(), 0, 0))
+  const diff = Math.floor(currentDate - start)
+  const oneDay = 1000 * 60 * 60 * 24
+  const DayOfTheYear = Math.floor(diff / oneDay)
+
+  // Day of the week
+  const startDate = Number(new Date(now.getFullYear(), 0, 1))
+  const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000))
+  const weekNumber = Math.ceil(days / 7)
 
   if (infosContainer)
     return (
@@ -50,7 +70,7 @@ const Infos = () => {
                 current timezone
               </span>
               <h2 className="text-[20px] font-bold sm:text-[40px] lg:text-5xl">
-                Europe/London
+                {timezoneArea}
               </h2>
             </div>
 
@@ -59,7 +79,7 @@ const Infos = () => {
                 day of the year
               </span>
               <h2 className="text-[20px] font-bold sm:text-[40px] lg:text-5xl">
-                295
+                {DayOfTheYear}
               </h2>
             </div>
           </section>
@@ -72,7 +92,7 @@ const Infos = () => {
                 day of the week
               </span>
               <h2 className="text-[20px] font-bold sm:text-[40px] lg:text-5xl">
-                5
+                {new Date().getDay()}
               </h2>
             </div>
 
@@ -81,7 +101,7 @@ const Infos = () => {
                 week number
               </span>
               <h2 className="text-[20px] font-bold sm:text-[40px] lg:text-5xl">
-                42
+                {weekNumber}
               </h2>
             </div>
           </section>

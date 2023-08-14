@@ -12,13 +12,13 @@ interface locationProps {
 
 const DisplayTime = () => {
   const [time, setTime] = useState<string>()
-  const [timeZone, setTimeZone] = useState<string>()
+  const [timezone, setTimezone] = useState<string>()
   const [message, setMessage] = useState<string>()
   const { infosContainer, setInfosContainer } = useGlobalContext()
   const [loading, setLoading] = useState(false)
   const [location, setLocation] = useState<locationProps>()
 
-  const testLocation = useCallback(() => {
+  const getCurrentLocation = useCallback(() => {
     const success = (position: GeolocationPosition) => {
       const latitude = position.coords.latitude
       const longitude = position.coords.longitude
@@ -55,11 +55,17 @@ const DisplayTime = () => {
       )
     }, 1000)
 
+    // const today = new Date()
+    // const format = new Intl.DateTimeFormat("en-us", {
+    //   dayPeriod: "long",
+    // })
+    // console.log(format)
+
     if (new Date().getHours() <= 12) setMessage('Good Morning')
     if (new Date().getHours() > 12) setMessage('Good Afternoon')
     if (new Date().getHours() >= 18) setMessage('Good Evening')
 
-    setTimeZone(
+    setTimezone(
       new Date()
         .toLocaleDateString('en-US', {
           day: 'numeric',
@@ -68,12 +74,12 @@ const DisplayTime = () => {
         .slice(4),
     )
 
-    testLocation()
+    getCurrentLocation()
 
     return () => {
       clearInterval(timer)
     }
-  }, [testLocation])
+  }, [getCurrentLocation])
 
   return (
     <section
@@ -162,7 +168,7 @@ const DisplayTime = () => {
                 xl:text-[40px]
               "
               >
-                {timeZone}
+                {timezone}
               </span>
             </h1>
           </div>
