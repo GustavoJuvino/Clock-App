@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '../context/store'
 
 const Infos = () => {
-  const { infosContainer } = useGlobalContext()
+  const { infosContainer, message } = useGlobalContext()
   const [timezoneArea, setTimezoneArea] = useState<string>()
 
   useEffect(() => {
@@ -28,32 +28,35 @@ const Infos = () => {
   if (infosContainer)
     return (
       <section
-        id="infos_container"
+        data-dayperiod={message}
+        id={message === 'Evening' ? 'evening' : 'day'}
         className="
           absolute
           bottom-0
           z-50
           h-[256px]
           w-full
-          text-darker-gunpowder-gray
+          data-[dayPeriod='Afternoon']:text-darker-gunpowder-gray
+          data-[dayPeriod='Evening']:text-white
+          data-[dayPeriod='Morning']:text-darker-gunpowder-gray
           sm:h-[440px]
           md:h-[400px]
         "
       >
         <div
           className="
-          flex
-          justify-between
-          max-sm:mx-[26px]
-          max-sm:my-12
-          max-sm:flex-col
-          sm:ml-16
-          sm:w-[538px] 
-          max-md:sm:my-[120px]
-          md:my-[74px]
-          lg:ml-[165px]
-          lg:w-[844px]
-        "
+            flex
+            justify-between
+            max-sm:mx-[26px]
+            max-sm:my-12
+            max-sm:flex-col
+            sm:ml-16
+            sm:w-[538px] 
+            max-md:sm:my-[120px]
+            md:my-[74px]
+            lg:ml-[165px]
+            lg:w-[844px]
+          "
         >
           <section className="flex flex-col gap-4 sm:gap-[42px]">
             <div className="max-sm:flex max-sm:justify-between">

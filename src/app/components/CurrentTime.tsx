@@ -44,14 +44,13 @@ const CurrentTime = () => {
         "
       >
         {time}
-
         <span
           className="
             ml-3
-            text-[15px]
+            text-[18px]
             font-light
-            max-sm:tracking-tighter
-            sm:text-[24px]
+            tracking-tighter
+            sm:text-[20px]
             md:text-[32px]
             xl:text-[40px]
           "
