@@ -9,4 +9,13 @@ module.exports = {
 
     return config
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.weatherapi.com',
+        port: '',
+      },
+    ],
+  },
 }

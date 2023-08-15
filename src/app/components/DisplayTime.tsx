@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import CurrentTime from './CurrentTime'
-import { Moon, Sun } from '../../../public/assets/svgs'
-import { useGlobalContext } from '../context/store'
-import Location from './Location'
+import React, { useEffect, useState } from 'react'
 import Quotes from './Quotes'
+import CurrentTime from './CurrentTime'
+import Location from './Location'
+import CurrentWeather from './CurrentWeather'
+import { useGlobalContext } from '../context/store'
+import Image from 'next/image'
 
 const today = new Date()
 const formatToday = new Intl.DateTimeFormat('en-us', {
@@ -13,10 +14,33 @@ const formatToday = new Intl.DateTimeFormat('en-us', {
 })
 export const dayPeriod = formatToday.format(today)
 
+interface WeatherProps {
+  condition: { text: string; icon: string }
+  temp_c: number
+  temp_f: number
+}
+
 const DisplayTime = () => {
-  const { infosContainer, message, setMessage } = useGlobalContext()
+  const [weather, setWeather] = useState<WeatherProps>()
+  const { location, infosContainer, message, setMessage } = useGlobalContext()
 
   useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${location.latitude},${location.longitude}`,
+        )
+        const data = await response.json()
+        setWeather(data.current)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    if (location.latitude && location.longitude) {
+      fetchWeather()
+    }
+
     switch (dayPeriod) {
       case 'at night':
       case 'in the evening':
@@ -29,7 +53,9 @@ const DisplayTime = () => {
         setMessage('Morning')
         break
     }
-  }, [setMessage])
+  }, [setMessage, location.latitude, location.longitude])
+
+  console.log(weather)
 
   return (
     <section
@@ -64,7 +90,15 @@ const DisplayTime = () => {
       >
         <section>
           <div className="flex items-center gap-x-4">
-            {message === 'Evening' ? <Moon /> : <Sun />}
+            {weather && (
+              <Image
+                width={40}
+                height={40}
+                alt="condition-icon"
+                src={`https://${weather.condition.icon}`}
+              />
+            )}
+
             <h4 className="flex text-[12px] uppercase max-md:tracking-[3.6px] max-mobile:hidden sm:text-base md:text-xl">
               {`Good ${message}, it's currently`}
             </h4>
@@ -73,6 +107,13 @@ const DisplayTime = () => {
           </div>
 
           <CurrentTime />
+          {weather && (
+            <CurrentWeather
+              condition={weather.condition.text}
+              celsius={weather.temp_c}
+              fahrenheit={weather.temp_f}
+            />
+          )}
           <Location />
         </section>
       </section>

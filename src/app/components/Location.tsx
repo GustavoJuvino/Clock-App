@@ -4,15 +4,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalContext } from '../context/store'
 import Button from './Button'
 
-interface locationProps {
-  city: string
-  countryCode: string
-}
+// interface locationProps {
+//   city: string
+//   countryCode: string
+// }
 
 const Location = () => {
   const [loading, setLoading] = useState(false)
-  const [location, setLocation] = useState<locationProps>()
-  const { infosContainer, setInfosContainer } = useGlobalContext()
+  // const [location, setLocation] = useState<locationProps>()
+  const { location, setLocation, infosContainer, setInfosContainer } =
+    useGlobalContext()
 
   const getCurrentLocation = useCallback(() => {
     const success = (position: GeolocationPosition) => {
@@ -39,7 +40,7 @@ const Location = () => {
     }
 
     navigator.geolocation.getCurrentPosition(success)
-  }, [])
+  }, [setLocation])
 
   useEffect(() => getCurrentLocation(), [getCurrentLocation])
 

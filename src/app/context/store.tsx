@@ -8,7 +8,17 @@ import {
   useState,
 } from 'react'
 
+interface locationProps {
+  city: string
+  countryCode: string
+  latitude?: number
+  longitude?: number
+}
+
 interface ContextProps {
+  location: locationProps
+  setLocation: Dispatch<SetStateAction<locationProps>>
+
   infosContainer: boolean
   setInfosContainer: Dispatch<SetStateAction<boolean>>
 
@@ -17,6 +27,9 @@ interface ContextProps {
 }
 
 const GlobalContext = createContext<ContextProps>({
+  location: { city: '', countryCode: '' },
+  setLocation: (): locationProps => Object(),
+
   infosContainer: false,
   setInfosContainer: (): boolean => true,
 
@@ -27,12 +40,23 @@ const GlobalContext = createContext<ContextProps>({
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const GlobalContextProvider = ({ children }) => {
-  const [infosContainer, setInfosContainer] = useState(false)
   const [message, setMessage] = useState('')
+  const [location, setLocation] = useState<locationProps>({
+    city: '',
+    countryCode: '',
+  })
+  const [infosContainer, setInfosContainer] = useState(false)
 
   return (
     <GlobalContext.Provider
-      value={{ infosContainer, setInfosContainer, message, setMessage }}
+      value={{
+        location,
+        setLocation,
+        infosContainer,
+        setInfosContainer,
+        message,
+        setMessage,
+      }}
     >
       {children}
     </GlobalContext.Provider>
