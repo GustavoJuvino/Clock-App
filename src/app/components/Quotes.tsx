@@ -1,42 +1,25 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import { Refresh } from '../../../public/assets/svgs'
 import { useGlobalContext } from '../context/store'
-
-interface quotesProps {
-  content: string
-  author: string
-}
+import { useQuery } from '@tanstack/react-query'
 
 const Quotes = () => {
-  const [loading, setLoading] = useState<boolean>()
-  const [quote, setQuote] = useState<quotesProps[]>()
   const { infosContainer } = useGlobalContext()
 
-  const getQuotes = useCallback(() => {
-    const fetchData = async () => {
-      setLoading(true)
-
-      try {
-        const response = await fetch('https://api.quotable.io/quotes/random')
-        const data = await response.json()
-        setQuote(data)
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setLoading(false)
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['quotes'],
+    queryFn: async () => {
+      const response = await fetch('https://api.quotable.io/quotes/random')
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
       }
-    }
+      return response.json()
+    },
+  })
 
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    getQuotes()
-  }, [getQuotes])
-
-  if (loading) return <h1>Loading Quotes...</h1>
+  if (isLoading) return <h1 className="z-50">Loading Quotes...</h1>
   else
     return (
       <div
@@ -53,15 +36,15 @@ const Quotes = () => {
       >
         <div className="flex">
           <p className="w-[90%] text-[12px] leading-[22px] sm:w-full sm:text-base">
-            {quote && quote[0].content}
+            {data && data[0].content}
           </p>
           <Refresh
-            onClick={() => getQuotes()}
+            onClick={() => refetch()}
             className="mt-2 cursor-pointer max-sm:ml-1 sm:mt-4"
           />
         </div>
         <h5 className="mt-[13px] text-[12px] sm:text-lg">
-          {quote && quote[0].author}
+          {data && data[0].author}
         </h5>
       </div>
     )

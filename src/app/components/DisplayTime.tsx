@@ -1,18 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Quotes from './Quotes'
-import CurrentTime from './CurrentTime'
+import Image from 'next/image'
 import Location from './Location'
+import CurrentTime from './CurrentTime'
 import CurrentWeather from './CurrentWeather'
 import { useGlobalContext } from '../context/store'
-import Image from 'next/image'
-
-const today = new Date()
-const formatToday = new Intl.DateTimeFormat('en-us', {
-  dayPeriod: 'short',
-})
-export const dayPeriod = formatToday.format(today)
+import useGetLocation from '../hooks/useGetLocation'
 
 interface WeatherProps {
   condition: { text: string; icon: string }
@@ -22,24 +17,29 @@ interface WeatherProps {
 
 const DisplayTime = () => {
   const [weather, setWeather] = useState<WeatherProps>()
-  const { location, infosContainer, message, setMessage } = useGlobalContext()
+  const { latitude, longitude } = useGetLocation()
+  const { infosContainer, message, setMessage } = useGlobalContext()
+
+  const today = new Date()
+  const formatToday = new Intl.DateTimeFormat('en-us', {
+    dayPeriod: 'short',
+  })
+  const dayPeriod = formatToday.format(today)
+
+  const fetchWeather = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${latitude},${longitude}`,
+      )
+      const data = await response.json()
+      setWeather(data.current)
+    } catch (error) {
+      throw new Error('Network response was not ok')
+    }
+  }, [latitude, longitude])
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await fetch(
-          `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${location.latitude},${location.longitude}`,
-        )
-        const data = await response.json()
-        setWeather(data.current)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    if (location.latitude && location.longitude) {
-      fetchWeather()
-    }
+    if (latitude && longitude) fetchWeather()
 
     switch (dayPeriod) {
       case 'at night':
@@ -53,9 +53,7 @@ const DisplayTime = () => {
         setMessage('Morning')
         break
     }
-  }, [setMessage, location.latitude, location.longitude])
-
-  console.log(weather)
+  }, [setMessage, dayPeriod, fetchWeather, latitude, longitude])
 
   return (
     <section
@@ -92,8 +90,8 @@ const DisplayTime = () => {
           <div className="flex items-center gap-x-4">
             {weather && (
               <Image
-                width={40}
-                height={40}
+                width={50}
+                height={50}
                 alt="condition-icon"
                 src={`https://${weather.condition.icon}`}
               />

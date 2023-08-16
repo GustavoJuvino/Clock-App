@@ -1,48 +1,27 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { useGlobalContext } from '../context/store'
+import React from 'react'
 import Button from './Button'
-
-// interface locationProps {
-//   city: string
-//   countryCode: string
-// }
+import { useGlobalContext } from '../context/store'
+import useGetLocation from '../hooks/useGetLocation'
+import { useQuery } from '@tanstack/react-query'
 
 const Location = () => {
-  const [loading, setLoading] = useState(false)
-  // const [location, setLocation] = useState<locationProps>()
-  const { location, setLocation, infosContainer, setInfosContainer } =
-    useGlobalContext()
+  const { infosContainer, setInfosContainer } = useGlobalContext()
+  const { latitude, longitude } = useGetLocation()
 
-  const getCurrentLocation = useCallback(() => {
-    const success = (position: GeolocationPosition) => {
-      const latitude = position.coords.latitude
-      const longitude = position.coords.longitude
-
-      const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-
-      const fetchData = async () => {
-        setLoading(true)
-
-        try {
-          const response = await fetch(geoApiUrl)
-          const data = await response.json()
-          setLocation(data)
-        } catch (error) {
-          console.log(error)
-        } finally {
-          setLoading(false)
-        }
+  const { data, isLoading } = useQuery({
+    queryKey: ['location', latitude, longitude],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
+      )
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
       }
-
-      fetchData()
-    }
-
-    navigator.geolocation.getCurrentPosition(success)
-  }, [setLocation])
-
-  useEffect(() => getCurrentLocation(), [getCurrentLocation])
+      return response.json()
+    },
+  })
 
   return (
     <div className="flex w-full justify-between max-md:flex-col max-md:gap-y-20 md:items-center">
@@ -56,8 +35,8 @@ const Location = () => {
             md:text-2xl
         "
       >
-        {loading && 'loading...'}
-        {location && `in ${location.city}, ${location.countryCode}`}
+        {isLoading && 'loading...'}
+        {`in ${data?.city}, ${data?.countryCode}`}
       </h3>
 
       <Button onClick={() => setInfosContainer(!infosContainer)} />
