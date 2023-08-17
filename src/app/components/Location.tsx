@@ -5,12 +5,13 @@ import Button from './Button'
 import { useGlobalContext } from '../context/store'
 import useGetLocation from '../hooks/useGetLocation'
 import { useQuery } from '@tanstack/react-query'
+import { motion } from 'framer-motion'
 
 const Location = () => {
   const { infosContainer, setInfosContainer } = useGlobalContext()
   const { latitude, longitude } = useGetLocation()
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['location', latitude, longitude],
     queryFn: async () => {
       const response = await fetch(
@@ -24,7 +25,19 @@ const Location = () => {
   })
 
   return (
-    <div className="flex w-full justify-between max-md:flex-col max-md:gap-y-20 md:items-center">
+    <motion.div
+      className="
+        flex
+        w-full
+        justify-between
+        max-md:flex-col
+        max-md:gap-y-20
+        md:items-center
+      "
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ ease: 'circOut', duration: 0.5 }}
+    >
       <h3
         className="
             text-[15px]
@@ -35,12 +48,11 @@ const Location = () => {
             md:text-2xl
         "
       >
-        {isLoading && 'loading...'}
         {`in ${data?.city}, ${data?.countryCode}`}
       </h3>
 
       <Button onClick={() => setInfosContainer(!infosContainer)} />
-    </div>
+    </motion.div>
   )
 }
 

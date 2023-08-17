@@ -37,9 +37,11 @@ const GlobalContext = createContext<ContextProps>({
   setMessage: (): string => '',
 })
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export const GlobalContextProvider = ({ children }) => {
+export const GlobalContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
   const [message, setMessage] = useState('')
   const [location, setLocation] = useState<locationProps>({
     city: '',

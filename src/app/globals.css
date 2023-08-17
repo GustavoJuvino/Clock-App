@@ -9,6 +9,7 @@
 body {
   margin: 0px;
   padding:0;
+  overflow: hidden;
 }
 
 ul, li{
@@ -25,10 +26,4 @@ ul, li{
 #evening {
   background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(10px);
-}
-
-@media (max-height: 750px) {
-  #display_clock[data-infos-actived="true"] {
-    top: -6rem;
-  }
 }

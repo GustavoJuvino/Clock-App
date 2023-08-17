@@ -8,6 +8,7 @@ import CurrentTime from './CurrentTime'
 import CurrentWeather from './CurrentWeather'
 import { useGlobalContext } from '../context/store'
 import useGetLocation from '../hooks/useGetLocation'
+import { motion } from 'framer-motion'
 
 interface WeatherProps {
   condition: { text: string; icon: string }
@@ -55,6 +56,11 @@ const DisplayTime = () => {
     }
   }, [setMessage, dayPeriod, fetchWeather, latitude, longitude])
 
+  const variants = {
+    closed: { opacity: 1, x: 0 },
+    open: { opacity: 1, y: -400 },
+  }
+
   return (
     <section
       className="
@@ -63,8 +69,8 @@ const DisplayTime = () => {
           h-[100vh]
           w-auto
           flex-col
-          max-sm:ml-[26px]
-          sm:ml-16
+          max-md:ml-[26px]
+          md:mx-16
           xl:mx-[165px]
         "
     >
@@ -78,16 +84,25 @@ const DisplayTime = () => {
           bottom-10
           z-50
           w-full
-          data-[infos-actived=true]:top-24
           sm:bottom-16
-          data-[infos-actived=true]:sm:top-14
           md:bottom-[98px]
-          data-[infos-actived=true]:md:top-0
-          data-[infos-actived=true]:md:mt-14
         "
       >
-        <section>
-          <div className="flex items-center gap-x-4">
+        <motion.section
+          variants={variants}
+          animate={infosContainer ? 'open' : 'closed'}
+          transition={{ ease: 'circOut', duration: 0.5 }}
+        >
+          <motion.div
+            className="
+              flex
+              items-center
+              gap-x-4
+            "
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ease: 'easeOut', duration: 0.9 }}
+          >
             {weather && (
               <Image
                 width={50}
@@ -102,7 +117,7 @@ const DisplayTime = () => {
             </h4>
 
             <h4 className="text-[12px] uppercase mobile:hidden">{message}</h4>
-          </div>
+          </motion.div>
 
           <CurrentTime />
           {weather && (
@@ -113,7 +128,7 @@ const DisplayTime = () => {
             />
           )}
           <Location />
-        </section>
+        </motion.section>
       </section>
     </section>
   )
