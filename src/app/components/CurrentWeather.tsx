@@ -18,7 +18,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
     <motion.div
       className="my-2 flex items-center"
       initial={{ opacity: 0, x: -100 }}
-      animate={{ opacity: 1, x: 0, type: 'spring' }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{ ease: 'circOut', duration: 0.5 }}
     >
       <h2 className="text-lg">{`${celsius}°C ,`}</h2>

@@ -9,6 +9,7 @@ import CurrentWeather from './CurrentWeather'
 import { useGlobalContext } from '../context/store'
 import useGetLocation from '../hooks/useGetLocation'
 import { motion } from 'framer-motion'
+import { Moon, Sun } from '../../../public/assets/svgs'
 
 interface WeatherProps {
   condition: { text: string; icon: string }
@@ -97,26 +98,31 @@ const DisplayTime = () => {
             className="
               flex
               items-center
-              gap-x-4
+              gap-x-2
+              sm:gap-x-4
             "
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ ease: 'easeOut', duration: 0.9 }}
           >
-            {weather && (
+            {weather ? (
               <Image
                 width={50}
                 height={50}
                 alt="condition-icon"
                 src={`https://${weather.condition.icon}`}
               />
+            ) : message === 'Evening' ? (
+              <Moon />
+            ) : (
+              <Sun />
             )}
 
             <h4 className="flex text-[12px] uppercase max-md:tracking-[3.6px] max-mobile:hidden sm:text-base md:text-xl">
               {`Good ${message}, it's currently`}
             </h4>
 
-            <h4 className="text-[12px] uppercase mobile:hidden">{message}</h4>
+            <h4 className="text-[12px] uppercase mobile:hidden">{`Good ${message}`}</h4>
           </motion.div>
 
           <CurrentTime />
