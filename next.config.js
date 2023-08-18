@@ -13,8 +13,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.weatherapi.com',
-        port: '',
+        hostname: '**',
       },
     ],
   },
