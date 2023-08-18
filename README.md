@@ -1,15 +1,15 @@
 <h1 align="center">⌚🌩️Clock App</h1>
 
 <h4 align="center">
-    This project is a challenge that I took from <a href="https://www.frontendmentor.io/challenges/photosnap-multipage-website-nMDSrNmNW">frontendmentor.io </a> 
+    This project is a challenge that I took from <a href="https://www.frontendmentor.io/challenges/clock-app-LMFaxFwrM">frontendmentor.io </a> 
     which consists of building a clock app that shows the current time and if
     the user accepts the location request it will show the current temperature.<br>
 </h4>
 <br>
 
 <h4 align="center">
-    <a align="center" href="https://www.frontendmentor.io/solutions/responsive-designo-website-project-using-react-next-and-tailwind-7-QAd_C_Na">Front-end mentor challenge.</a> //
-     <a align="center" href="https://designo-multi-page-website-hazel.vercel.app/">Clock App</a>
+    <a align="center" href="https://www.frontendmentor.io/solutions/clock-app-with-current-temperature-nYla-hZkJa">Front-end mentor challenge.</a> //
+     <a align="center" href="https://clock-app-pied.vercel.app/">Clock App</a>
 </h4>
 
 <br />
