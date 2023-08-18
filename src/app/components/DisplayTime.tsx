@@ -17,16 +17,16 @@ interface WeatherProps {
   temp_f: number
 }
 
+const today = new Date()
+const formatToday = new Intl.DateTimeFormat('en-us', {
+  dayPeriod: 'short',
+})
+const dayPeriod = formatToday.format(today)
+
 const DisplayTime = () => {
   const [weather, setWeather] = useState<WeatherProps>()
   const { latitude, longitude } = useGetLocation()
   const { infosContainer, message, setMessage } = useGlobalContext()
-
-  const today = new Date()
-  const formatToday = new Intl.DateTimeFormat('en-us', {
-    dayPeriod: 'short',
-  })
-  const dayPeriod = formatToday.format(today)
 
   const fetchWeather = useCallback(async () => {
     try {
@@ -49,13 +49,14 @@ const DisplayTime = () => {
         setMessage('Evening')
         break
       case 'in the afternoon':
+      case 'noon':
         setMessage('Afternoon')
         break
       case 'in the morning':
         setMessage('Morning')
         break
     }
-  }, [setMessage, dayPeriod, fetchWeather, latitude, longitude])
+  }, [setMessage, fetchWeather, latitude, longitude])
 
   const variants = {
     closed: { opacity: 1, x: 0 },
