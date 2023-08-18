@@ -49,10 +49,10 @@ const DisplayTime = () => {
         setMessage('Evening')
         break
       case 'in the afternoon':
-      case 'noon':
         setMessage('Afternoon')
         break
       case 'in the morning':
+      case 'noon':
         setMessage('Morning')
         break
     }
@@ -60,7 +60,7 @@ const DisplayTime = () => {
 
   const variants = {
     closed: { opacity: 1, x: 0 },
-    open: { opacity: 1, y: -400 },
+    open: { opacity: 1, y: -250 },
   }
 
   return (
@@ -83,7 +83,7 @@ const DisplayTime = () => {
         data-infos-actived={infosContainer}
         className="
           absolute
-          bottom-10
+          bottom-44
           z-50
           w-full
           sm:bottom-16
