@@ -33,7 +33,7 @@
 <img src="./github-imgs/desktop-night-2.png" title="NightTime 2">
 
 <h2 align="center">Mobile Version 📱</h2>
-<img src="./github-imgs/mobile-1.png" title="Mobile Daytime 1">
+<img src="./github-imgs/mobile.png" title="Mobile Daytime 1">
 <img src="./github-imgs/mobile-night-1.png" title="Mobile NightTime 1">
 <img src="./github-imgs/mobile-2.png" title="Mobile Daytime 2">
 <img src="./github-imgs/mobile-night-2.png" title="Mobile NightTime 2">
