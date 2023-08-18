@@ -105,12 +105,13 @@ const DisplayTime = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ ease: 'easeOut', duration: 0.9 }}
           >
-            {weather ? (
+            {weather?.condition.icon ? (
               <Image
                 width={50}
                 height={50}
                 alt="condition-icon"
                 src={`https://${weather.condition.icon}`}
+                priority={true}
               />
             ) : message === 'Evening' ? (
               <Moon />
