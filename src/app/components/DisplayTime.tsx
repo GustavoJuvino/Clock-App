@@ -110,8 +110,7 @@ const DisplayTime = () => {
                 width={50}
                 height={50}
                 alt="condition-icon"
-                src={`https://${weather.condition.icon}`}
-                priority={true}
+                src={`https:${weather.condition.icon}`}
               />
             ) : message === 'Evening' ? (
               <Moon />
