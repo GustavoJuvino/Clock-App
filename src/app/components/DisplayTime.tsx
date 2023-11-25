@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
 import Quotes from './Quotes'
-import Image from 'next/image'
 import Location from './Location'
 import CurrentTime from './CurrentTime'
 import CurrentWeather from './CurrentWeather'
@@ -10,6 +9,7 @@ import { useGlobalContext } from '../context/store'
 import useGetLocation from '../hooks/useGetLocation'
 import { motion } from 'framer-motion'
 import { Moon, Sun } from '../../../public/assets/svgs'
+import Image from 'next/image'
 
 interface WeatherProps {
   condition: { text: string; icon: string }
